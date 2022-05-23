@@ -22,6 +22,7 @@ async function run() {
         await client.connect();
         const partCollection = client.db('bike_parts').collection('parts');
         const bookingCollection = client.db('bike_parts').collection('bookings');
+        const userCollection = client.db('bike_parts').collection('users');
 
         app.get('/part', async (req, res) => {
             const query = {};
@@ -43,6 +44,30 @@ async function run() {
             const result = await bookingCollection.insertOne(booking);
             res.send(result);
         });
+
+        //Get bookings using Email
+        app.get('/booking', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const bookings = await bookingCollection.find(query).toArray();
+            res.send(bookings);
+        });
+
+        //User info
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user,
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            // const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+            res.send(result);
+        });
+
+
 
 
 
