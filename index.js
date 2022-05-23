@@ -85,7 +85,10 @@ async function run() {
         })
 
 
-
+        app.get('/user', verifyJWT, async (req, res) => {
+            const users = await userCollection.find().toArray();
+            res.send(users);
+        });
 
         //User info
         app.put('/user/:email', async (req, res) => {
@@ -100,12 +103,6 @@ async function run() {
             const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
             res.send({ result, token });
         });
-
-
-
-
-
-
 
 
     }
