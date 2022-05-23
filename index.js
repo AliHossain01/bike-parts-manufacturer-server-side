@@ -63,13 +63,6 @@ async function run() {
             res.send(result);
         });
 
-        //Get bookings using Email
-        // app.get('/booking', async (req, res) => {
-        //     const email = req.query.email;
-        //     const query = { email: email };
-        //     const bookings = await bookingCollection.find(query).toArray();
-        //     res.send(bookings);
-        // });
 
         app.get('/booking', verifyJWT, async (req, res) => {
             const email = req.query.email;
@@ -122,7 +115,16 @@ async function run() {
                 res.status(403).send({ message: 'forbidden' });
             }
 
+        });
+
+        app.get('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user.role === 'admin';
+            res.send({ admin: isAdmin })
         })
+
+
 
 
     }
