@@ -21,6 +21,7 @@ async function run() {
     try {
         await client.connect();
         const partCollection = client.db('bike_parts').collection('parts');
+        const bookingCollection = client.db('bike_parts').collection('bookings');
 
         app.get('/part', async (req, res) => {
             const query = {};
@@ -35,6 +36,14 @@ async function run() {
             const part = await partCollection.findOne(query);
             res.send(part);
         });
+
+        // POST
+        app.post('/booking', async (req, res) => {
+            const booking = req.body;
+            const result = await bookingCollection.insertOne(booking);
+            res.send(result);
+        });
+
 
 
 
