@@ -41,6 +41,11 @@ async function run() {
         const partCollection = client.db('bike_parts').collection('parts');
         const bookingCollection = client.db('bike_parts').collection('bookings');
         const userCollection = client.db('bike_parts').collection('users');
+        const reviewCollection = client.db('bike_parts').collection('reviews');
+
+
+
+
 
         app.get('/part', async (req, res) => {
             const query = {};
@@ -121,8 +126,24 @@ async function run() {
             const email = req.params.email;
             const user = await userCollection.findOne({ email: email });
             const isAdmin = user.role === 'admin';
-            res.send({ admin: isAdmin })
-        })
+            res.send({ admin: isAdmin });
+        });
+
+
+
+        // POST
+        app.post('/review', async (req, res) => {
+            const newReview = req.body;
+            const result = await reviewCollection.insertOne(newReview);
+            res.send(result);
+        });
+
+
+        app.get('/review', async (req, res) => {
+            const reviews = await reviewCollection.find().toArray();
+            res.send(reviews);
+        });
+
 
 
 
