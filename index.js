@@ -54,11 +54,26 @@ async function run() {
             res.send(parts);
         })
 
+        app.post('/part', async (req, res) => {
+            const newPart = req.body;
+            const result = await partCollection.insertOne(newPart);
+            res.send(result);
+        });
+
+
         app.get('/part/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const part = await partCollection.findOne(query);
             res.send(part);
+        });
+
+        // DELETE
+        app.delete('/part/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await partCollection.deleteOne(query);
+            res.send(result);
         });
 
         // POST
