@@ -90,6 +90,26 @@ async function run() {
             res.send(result);
         });
 
+        //Quantity update
+        app.put("/part/:id", async (req, res) => {
+            const id = req.params.id;
+            const deliveredQuantity = req.body;
+            console.log(deliveredQuantity);
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+
+            const updateDoc = {
+                $set: {
+                    quantity: deliveredQuantity.quantity,
+                }
+            };
+
+            const result = await partCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        });
+
+
+
         // POST
         app.post('/booking', async (req, res) => {
             const booking = req.body;
