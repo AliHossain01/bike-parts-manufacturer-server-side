@@ -66,7 +66,7 @@ async function run() {
             const cursor = partCollection.find(query);
             const parts = await cursor.toArray();
             res.send(parts);
-        })
+        });
 
         app.post('/part', async (req, res) => {
             const newPart = req.body;
@@ -115,6 +115,15 @@ async function run() {
             const booking = req.body;
             const result = await bookingCollection.insertOne(booking);
             res.send(result);
+        });
+
+        //Get all orders
+
+        app.get('/allorders', async (req, res) => {
+            const query = {};
+            const cursor = bookingCollection.find(query);
+            const orders = await cursor.toArray();
+            res.send(orders);
         });
 
 
